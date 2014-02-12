@@ -2,6 +2,7 @@ package beans;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Calendar;
 
 
 /**
@@ -12,7 +13,7 @@ import java.sql.Timestamp;
 public class Activitat {
 		private String nom;
 		private String descripcio;
-		private Date dia;
+		private Calendar dia;
 		private Timestamp hora;
 		private String espai;
 		private boolean senior;
@@ -20,7 +21,7 @@ public class Activitat {
 		{
 	
 		}
-		public Activitat(String nom, String descripcio, Date dia, Timestamp hora, String espai, boolean senior)
+		public Activitat(String nom, String descripcio, Calendar dia, Timestamp hora, String espai, boolean senior)
 		{
 			this.nom=nom;
 			this.descripcio=descripcio;
@@ -41,10 +42,10 @@ public class Activitat {
 		public void setDescripcio(String descripcio) {
 			this.descripcio = descripcio;
 		}
-		public Date getData_realitzacio() {
+		public Calendar getData_realitzacio() {
 			return dia;
 		}
-		public void setData_realitzacio(Date data_realitzacio) {
+		public void setData_realitzacio(Calendar data_realitzacio) {
 			this.dia = data_realitzacio;
 		}
 		public Timestamp getHora() {
