@@ -1,6 +1,7 @@
 package beans;
 
 import java.sql.Date;
+import java.util.Calendar;
 
 public class Soci {
 	private String dni;
@@ -8,14 +9,14 @@ public class Soci {
 	private String cog1;
 	private String cog2;
 	private String adreca;
-	private Date data_naix;
-	private Date data_alta;
+	private Calendar data_naix;
+	private Calendar data_alta;
 	private String foto;
 	
 	public Soci() {
 		
 	}
-	public Soci(String dni, String nom, String cog1, String cog2, String adreca, Date data_naix, Date data_alta, String foto) {
+	public Soci(String dni, String nom, String cog1, String cog2, String adreca, Calendar data_naix, Calendar data_alta, String foto) {
 		this.dni=dni;
 		this.nom=nom;
 		this.cog1=cog2;
@@ -56,16 +57,16 @@ public class Soci {
 	public void setAdreca(String adreca) {
 		this.adreca = adreca;
 	}
-	public Date getData_naixement() {
+	public Calendar getData_naixement() {
 		return data_naix;
 	}
-	public void setData_naixement(Date data_naixement) {
+	public void setData_naixement(Calendar data_naixement) {
 		this.data_naix = data_naixement;
 	}
-	public Date getData_alta() {
+	public Calendar getData_alta() {
 		return data_alta;
 	}
-	public void setData_alta(Date data_alta) {
+	public void setData_alta(Calendar data_alta) {
 		this.data_alta = data_alta;
 	}
 	public String getFoto() {
