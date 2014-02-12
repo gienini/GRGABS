@@ -3,6 +3,7 @@ package beans;
 import java.sql.Date;
 
 public class Soci {
+	private String dni;
 	private String nom;
 	private String cog1;
 	private String cog2;
@@ -14,7 +15,8 @@ public class Soci {
 	public Soci() {
 		
 	}
-	public Soci(String nom, String cog1, String cog2, String adreca, Date data_naix, Date data_alta, String foto) {
+	public Soci(String dni, String nom, String cog1, String cog2, String adreca, Date data_naix, Date data_alta, String foto) {
+		this.dni=dni;
 		this.nom=nom;
 		this.cog1=cog2;
 		this.cog2=cog2;
@@ -23,6 +25,13 @@ public class Soci {
 		this.data_alta=data_alta;
 		this.foto=foto;
 	}
+
+	public String getDni() {
+		return dni;
+	}
+	public void setDni(String dni) {
+		this.dni = dni;
+	}	
 	public String getNom() {
 		return nom;
 	}

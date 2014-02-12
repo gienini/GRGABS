@@ -20,14 +20,14 @@
          and the minEvictableIdleTimeMillis configuration parameter.
          -->
 
-	<Resource name="" 
+	<Resource name="MySQLconnection" 
 		auth="Container"
 		type="javax.sql.DataSource"
 		username=""
 		password=""
 		driverClassName="com.mysql.jdbc.Driver"
-		url="jdbc:mysql//0.0.0.0:3306/aplicationdb"
-		maxActive=""
+		url="jdbc:mysql//localhost:3306/bbdd"
+		maxActive="15"
 		maxIdle="3"
 		/>
 </Context>
