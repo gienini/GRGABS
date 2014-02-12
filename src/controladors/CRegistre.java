@@ -1,16 +1,16 @@
 package controladors;
 
-public class CLogin implements Controller {
+public class CRegistre implements Controller {
 	
 	private String retorno;
 	
-	public CLogin (){
-		retorno="";
-		
+	public CRegistre(){
+		retorno = "";
 	}
 
 	@Override
 	public String getPagina(String s) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
