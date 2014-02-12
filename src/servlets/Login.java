@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,13 @@ import controladors.Controller;
  */
 public class Login extends HttpServlet {
 
+	private String context;
+
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		context = config.getServletContext().getRealPath("/static");
+	}
+
 	@Override
 	/**
 	 * Gestiona les peticions get per a la part de login
@@ -30,21 +38,34 @@ public class Login extends HttpServlet {
 		 * Inicialitzacio de variables
 		 * 
 		 */
+
 		String pagina = "";
 		Controller controlador = null;
+		String params = "";
 		PrintWriter pw = resp.getWriter();
 		/**
-		 * Decisio: formulari de registre o de login
+		 * Comparacio: formulari de registre o de login
+		 * 
+		 * CATCH per mirar el contingut de get. s'incloura el parametre
+		 * "registre" al get per accedir a la pagina de registre totes les
+		 * altres opcions portaran a la pagina de login
+		 * 
 		 */
-		if (req.getParameterNames().nextElement().equals("registre")) {
-			controlador = new CRegistre();
-			pagina = controlador.getPagina(null);
 
-		} else {
+		try {
+			if (req.getParameterNames().nextElement().equals("registre")) {
+				controlador = new CRegistre();
+				pagina = controlador.getPagina(context);
+
+			} else {
+				controlador = new CLogin();
+				pagina = controlador.getPagina(context);
+			}
+		} catch (Exception e) {
 			controlador = new CLogin();
-			pagina = controlador.getPagina(null);
+			pagina = controlador.getPagina(context);
 		}
+
 		pw.write(pagina);
 	}
-
 }
