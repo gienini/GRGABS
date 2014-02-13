@@ -92,7 +92,7 @@ public class CPersonal implements Controller{
 		String adreca = "Carrer del mig";*/
 		String edat = "26";
 		try {
-			BufferedReader read = new BufferedReader(new FileReader(s + "/profile.html"));
+			BufferedReader read = new BufferedReader(new FileReader(s + "/bodyLoginOn.html"));
 			try {
 				line = read.readLine();
 				while(line != null){
@@ -137,11 +137,35 @@ public class CPersonal implements Controller{
 		Soci soci = socif.crearSoci();
 		soci = socijndi.getSoci(dni);
 		Activitat[] activitats = socijndi.getActivitats(soci);
-		
-		for(Activitat activitat : activitats)
-		{
-			line = "<div>"+activitat.getNom()+" "+activitat.getDescripcio()+" "+activitat.getEspai()+" "+ activitat.getData_realitzacio()+" "+ activitat.getHora() +"</div>";
-			content = content + line;
+		try {
+			BufferedReader read = new BufferedReader(new FileReader(s + "/bodyLoginOn.html"));
+			try {
+				line = read.readLine();
+				while(line != null){
+					//We need to find if the line contains a value
+					if(line.contains("%activitat:info_activitat%")){
+						for(Activitat activitat : activitats)
+						{
+							/**
+							 * Generar tot el div d'activitats
+							 */
+							line = "<div>"+activitat.getNom()+" "+activitat.getDescripcio()+" "+activitat.getEspai()+" "+ activitat.getData_realitzacio()+" "+ activitat.getHora() +"</div>";
+							content = content + line.replaceAll("%personal:variable%", "Hello World");
+						}
+						//line = line.replaceAll("%personal:variable%", "Hello World");
+					} 
+					content = content + line;
+					line = read.readLine();
+				}
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
 		return content;
