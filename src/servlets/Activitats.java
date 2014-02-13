@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controladors.CActivitats;
+
 public class Activitats extends HttpServlet {
 	private String context;
 
@@ -18,7 +20,7 @@ public class Activitats extends HttpServlet {
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
 		PrintWriter pw = resp.getWriter();
@@ -27,17 +29,13 @@ public class Activitats extends HttpServlet {
 
 			if (req.getSession().getAttribute("login").equals("nologin")) {
 				resp.sendRedirect("/GRGABS/login");
-
 			}
 		} catch (Exception e) {
 			resp.sendRedirect("/GRGABS/login");
 		}
+		CActivitats cont = new CActivitats();
 
-	}
-
-	@Override
-	public void init() throws ServletException {
-		// TODO Auto-generated method stub
+		pw.write(cont.getPagina(context));
 
 	}
 

@@ -3,9 +3,12 @@ package servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.GregorianCalendar;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,10 +16,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import beans.Soci;
 import DAO.SociJNDIDAO;
 import controladors.CLogin;
 import controladors.CRegistre;
 import controladors.Controller;
+import factories.SociFactory;
 
 /**
  * Clase per a la gestio de les vistes de login i registre
@@ -24,7 +29,7 @@ import controladors.Controller;
  * @author Fran Gienini
  * 
  */
-public class Login extends HttpServlet { 
+public class Login extends HttpServlet {
 
 	private String context;
 
@@ -74,6 +79,23 @@ public class Login extends HttpServlet {
 		pw.write(pagina);
 	}
 
+	private Connection contextConnection() {
+		Context init;
+		try {
+			init = new InitialContext();
+			Context env = (Context) init.lookup("java:comp/env");
+			DataSource ds = (DataSource) env.lookup("jdbc/bbdd");
+			Connection con = ds.getConnection();
+			return con;
+		} catch (NamingException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -82,6 +104,7 @@ public class Login extends HttpServlet {
 		 * significara que aquesta clau conte el DNI del usuari
 		 * 
 		 */
+		req.getSession().setAttribute("login", "nologin");
 		try {
 			if (!req.getParameter("user").equals(null)) {
 				/**
@@ -89,10 +112,8 @@ public class Login extends HttpServlet {
 				 * altres classes el trobarem inaccesible
 				 * 
 				 */
-				Context init = new InitialContext();
-				Context env = (Context) init.lookup("java:comp/env");
-				DataSource ds = (DataSource) env.lookup("jdbc/bbdd");
-				Connection con = ds.getConnection();
+
+				Connection con = contextConnection();
 				/**
 				 * La pasem al nostre DAO per comparar usuaris i contrasenya
 				 * 
@@ -100,17 +121,38 @@ public class Login extends HttpServlet {
 				SociJNDIDAO login = new SociJNDIDAO(con);
 				if (login.isLogin(req.getParameter("user"),
 						req.getParameter("pass"))) {
-					/**S'inicialitza el valor de la sesio "login" amb el DNI de l'usuari
+					/**
+					 * S'inicialitza el valor de la sesio "login" amb el DNI de
+					 * l'usuari
 					 * 
 					 */
 					req.getSession().setAttribute("login",
 							req.getParameter("user"));
 					resp.sendRedirect("/GRGABS/activitats");
-				} else
+				} else {
+
 					resp.sendRedirect("/GRGABS/login");
+				}
 				String usuari = "";
 
 				con.close();
+
+			} else if (!(req.getParameter("nom").equals(null)
+					&& req.getParameter("cognom1").equals(null)
+					&& req.getParameter("cognom2").equals(null)
+					&& req.getParameter("dni").equals(null)
+					&& req.getParameter("adreca").equals(null)
+					&& req.getParameter("data-naix").equals(null) && req
+					.getParameter("passR").equals(null))) {
+				SociJNDIDAO registre = new SociJNDIDAO(contextConnection());
+
+				Soci s = new Soci(req.getParameter("dni"),
+						req.getParameter("nom"), req.getParameter("cognom1"),
+						req.getParameter("cognom2"),
+						req.getParameter("adreca"), new GregorianCalendar(2000,
+								5, 5), new GregorianCalendar(2000, 5, 5), "");
+				s.setPasw(req.getParameter("passR"));
+				registre.add(s);
 
 			}
 		} catch (Exception e) {
