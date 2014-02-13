@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -31,10 +32,11 @@ public class Personal extends HttpServlet {
     }
     
     private String context;
+    private Connection con;
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		context = config.getServletContext().getRealPath("/static");
+		context = config.getServletContext().getRealPath("/staticpersonal");
 	}
 
 	/**
@@ -45,19 +47,19 @@ public class Personal extends HttpServlet {
 		 * Inicialitzacio de variables
 		 * 
 		 */
-
 		String pagina = "";
 		Controller controlador = null;
 		String params = "";
 		PrintWriter pw = response.getWriter();
+		//The user's session DNI
+		String dni = (String) request.getSession().getAttribute("login");
 		
 		/**
 		 * Load the Personal page
 		 */
-
 		try {
 			controlador = new CPersonal();
-			pagina = controlador.getPagina(context);
+			pagina = controlador.getPagina(context, dni);
 		} catch (Exception e) {
 			controlador = new CLogin();
 			pagina = controlador.getPagina(context);

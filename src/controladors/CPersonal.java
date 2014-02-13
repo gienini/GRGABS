@@ -5,30 +5,67 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 import factories.SociFactory;
+import DAO.SociJNDIDAO;
 import beans.Soci;
 
 public class CPersonal implements Controller{
 
+	Connection con;
 	@Override
-	public String getPagina(String s) {
+	public String getPagina(String s, String dni) {
 		//Passem el context per paràmetre, d'aquesta manera obtenim el path del contingut estàtic
+		/*** Initialize connection ***/
+		Context init = null;
+		try {
+			init = new InitialContext();
+		} catch (NamingException e4) {
+			// TODO Auto-generated catch block
+			e4.printStackTrace();
+		}
+		Context env = null;
+		try {
+			env = (Context) init.lookup("java:comp/env");
+		} catch (NamingException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
+		DataSource ds = null;
+		try {
+			ds = (DataSource) env.lookup("jdbc/bbdd");
+		} catch (NamingException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		try {
+			con = ds.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		/*** Header ***/
 		String page = "" ;
 		/*** Footer ***/
 		/***page += "footer";**/
 		try {
 			/*** Header ***/
-			page = HTMLReader.getFile(new FileInputStream(s
-					+ "/header.html"));
+			/*page = HTMLReader.getFile(new FileInputStream(s
+					+ "/header.html"));*/
 			/*** Soci Persnal Info ***/
-			page = page+getSociPersonalInfo(s);			
+			page = page+getSociPersonalInfo(s, dni);			
 			/*** Soci Personal Activities ***/
-			//page = page+getSociPersonalActivitats(s);
+			page = page+getSociPersonalActivitats(s);
 			/*** Footer ***/
 			page = page+HTMLReader.getFile(new FileInputStream(s
-					+ "/footer.html"));
+					+ "/profile.html"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -36,28 +73,22 @@ public class CPersonal implements Controller{
 		
 	}
 
-	private String getSociPersonalActivitats(String s) {
-		String content = "content";
-		try {
-			content = HTMLReader.getFile(new FileInputStream(s
-					+ "/login.html"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-		return content;
-	}
-
-	private String getSociPersonalInfo(String s) {
+	private String getSociPersonalInfo(String s, String dni) {
 
 		String content = "";
 		String line = "";
 		
-		/***Get the soci values **/
-		String name = "David";
+		/***Get the soci **/
+		SociJNDIDAO socijndi = new SociJNDIDAO(con);
+		SociFactory socif = new SociFactory();
+		Soci soci = socif.crearSoci();
+		soci = socijndi.getSoci(dni);
+		
+		
+		/*String name = "David";
 		String cog1 = "Rubio";
-		String dni = "47845639G";
-		String adreca = "Carrer del mig";
+		dni = "47845639G";
+		String adreca = "Carrer del mig";*/
 		String edat = "26";
 		try {
 			BufferedReader read = new BufferedReader(new FileReader(s + "/profile.html"));
@@ -68,13 +99,13 @@ public class CPersonal implements Controller{
 					if(line.contains("%personal:variable%")){
 						line = line.replaceAll("%personal:variable%", "Hello World");
 					} else if (line.contains("%personal:name%")){
-						line = line.replaceAll("%personal:name%", name);
+						line = line.replaceAll("%personal:name%", soci.getNom());
 					} else if (line.contains("%personal:cog1%")){
-						line = line.replaceAll("%personal:cog1%", cog1);
+						line = line.replaceAll("%personal:cog1%", soci.getCog1() +" "+soci.getCog2());
 					} else if (line.contains("%personal:dni%")){
-						line = line.replaceAll("%personal:dni%", dni);
+						line = line.replaceAll("%personal:dni%", soci.getDni());
 					} else if (line.contains("%personal:adreca%")){
-						line = line.replaceAll("%personal:adreca%", adreca);
+						line = line.replaceAll("%personal:adreca%", soci.getAdreca());
 					} else if (line.contains("%personal:edat%")){
 						line = line.replaceAll("%personal:edat%", edat);
 					} 
@@ -94,6 +125,27 @@ public class CPersonal implements Controller{
 
 		return content;
 	}
+	
+	private String getSociPersonalActivitats(String s) {
+		String content = "content";
+		try {
+			content = HTMLReader.getFile(new FileInputStream(s
+					+ "/login.html"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return content;
+	}
+
+	@Override
+	public String getPagina(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }
+
+
 
