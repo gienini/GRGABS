@@ -85,22 +85,31 @@ public class Login extends HttpServlet {
 		try {
 			if (!req.getParameter("user").equals(null)) {
 				/**
-				 * Pasem el context per poder accedir a la BD mitjançant JNDI
+				 * Agafem la conexio JNDI del nostre context, ja que desde les
+				 * altres classes el trobarem inaccesible
 				 * 
 				 */
 				Context init = new InitialContext();
 				Context env = (Context) init.lookup("java:comp/env");
 				DataSource ds = (DataSource) env.lookup("jdbc/bbdd");
-				Connection con = ds.getConnection(); 
+				Connection con = ds.getConnection();
+				/**
+				 * La pasem al nostre DAO per comparar usuaris i contrasenya
+				 * 
+				 */
 				SociJNDIDAO login = new SociJNDIDAO(con);
 				if (login.isLogin(req.getParameter("user"),
 						req.getParameter("pass"))) {
-					req.getSession().setAttribute("login", "");
-					resp.sendRedirect("FUNCIONA");
+					/**S'inicialitza el valor de la sesio "login" amb el DNI de l'usuari
+					 * 
+					 */
+					req.getSession().setAttribute("login",
+							req.getParameter("user"));
+					resp.sendRedirect("/GRGABS/activitats");
 				} else
-					resp.sendRedirect("NOFUNCIONA");
+					resp.sendRedirect("/GRGABS/login");
 				String usuari = "";
-				
+
 				con.close();
 
 			}
