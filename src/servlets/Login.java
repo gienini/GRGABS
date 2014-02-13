@@ -2,17 +2,21 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
+import DAO.SociJNDIDAO;
 import controladors.CLogin;
 import controladors.CRegistre;
 import controladors.Controller;
-import factories.SociFactory;
 
 /**
  * Clase per a la gestio de les vistes de login i registre
@@ -80,15 +84,28 @@ public class Login extends HttpServlet {
 		 */
 		try {
 			if (!req.getParameter("user").equals(null)) {
-				// TODO FUNCIONAMIENT DEL LOGIN
-				// Usuari u = SociFactory
-				
+				/**
+				 * Pasem el context per poder accedir a la BD mitjançant JNDI
+				 * 
+				 */
+				Context init = new InitialContext();
+				Context env = (Context) init.lookup("java:comp/env");
+				DataSource ds = (DataSource) env.lookup("jdbc/bbdd");
+				Connection con = ds.getConnection(); 
+				SociJNDIDAO login = new SociJNDIDAO(con);
+				if (login.isLogin(req.getParameter("user"),
+						req.getParameter("pass"))) {
+					req.getSession().setAttribute("login", "");
+					resp.sendRedirect("FUNCIONA");
+				} else
+					resp.sendRedirect("NOFUNCIONA");
 				String usuari = "";
-				req.getSession().setAttribute("login", usuari);
-				resp.sendRedirect("FUNCIONA");
+				
+				con.close();
+
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 
 	}
