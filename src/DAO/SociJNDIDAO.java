@@ -107,7 +107,7 @@ public class SociJNDIDAO implements IDAOSoci{
 	public boolean isLogin(String Dni, String password) {
 		// TODO Auto-generated method stub
 		queryString = "SELECT COUNT (*) FROM SOCIS WHERE DNI=? AND PASW=?";
-		
+		//
 		try {
 			s = new PreparedStatement((MySQLConnection) c,queryString);
 			
