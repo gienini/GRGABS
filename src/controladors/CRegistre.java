@@ -12,14 +12,17 @@ public class CRegistre implements Controller {
 	}
  
 	@Override
-	public String getPagina(String s) {
+	public String getPagina(String contextPath) {
+		String path = "staticlogin/";
 		try {
-			retorn = HTMLReader.getFile(new FileInputStream(s
-					+ "WebContent/static/header.html"));
-			retorn = HTMLReader.getFile(new FileInputStream(s
-					+ "WebContent/static/registre.html"));
-			retorn = HTMLReader.getFile(new FileInputStream(s
-					+ "WebContent/static/footer.html"));
+			retorn = HTMLReader.getFile(new FileInputStream(contextPath + path
+					+ "/header.html"));
+			retorn = retorn
+					+ HTMLReader.getFile(new FileInputStream(contextPath + path
+							+ "/login.html"));
+			retorn = retorn
+					+ HTMLReader.getFile(new FileInputStream(contextPath + path
+							+ "/footer.html"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

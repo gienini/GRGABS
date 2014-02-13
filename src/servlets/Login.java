@@ -24,13 +24,13 @@ import controladors.Controller;
  * @author Fran Gienini
  * 
  */
-public class Login extends HttpServlet {
+public class Login extends HttpServlet { 
 
 	private String context;
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		context = config.getServletContext().getRealPath("/staticlogin");
+		context = config.getServletContext().getRealPath("/");
 	}
 
 	@Override
