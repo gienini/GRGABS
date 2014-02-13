@@ -23,7 +23,7 @@
 	<Resource name="MySQLconnection" 
 		auth="Container"
 		type="javax.sql.DataSource"
-		username=""
+		username="root"
 		password=""
 		driverClassName="com.mysql.jdbc.Driver"
 		url="jdbc:mysql//localhost:3306/bbdd"
