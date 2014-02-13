@@ -2,13 +2,18 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
+import DAO.SociJNDIDAO;
 import controladors.CLogin;
 import controladors.CRegistre;
 import controladors.Controller;
@@ -25,7 +30,7 @@ public class Login extends HttpServlet {
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		context = config.getServletContext().getRealPath("/static");
+		context = config.getServletContext().getRealPath("/staticlogin");
 	}
 
 	@Override
@@ -67,5 +72,50 @@ public class Login extends HttpServlet {
 		}
 
 		pw.write(pagina);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		/**
+		 * Si el valor de "user" al formulari post es diferent de null
+		 * significara que aquesta clau conte el DNI del usuari
+		 * 
+		 */
+		try {
+			if (!req.getParameter("user").equals(null)) {
+				/**
+				 * Agafem la conexio JNDI del nostre context, ja que desde les
+				 * altres classes el trobarem inaccesible
+				 * 
+				 */
+				Context init = new InitialContext();
+				Context env = (Context) init.lookup("java:comp/env");
+				DataSource ds = (DataSource) env.lookup("jdbc/bbdd");
+				Connection con = ds.getConnection();
+				/**
+				 * La pasem al nostre DAO per comparar usuaris i contrasenya
+				 * 
+				 */
+				SociJNDIDAO login = new SociJNDIDAO(con);
+				if (login.isLogin(req.getParameter("user"),
+						req.getParameter("pass"))) {
+					/**S'inicialitza el valor de la sesio "login" amb el DNI de l'usuari
+					 * 
+					 */
+					req.getSession().setAttribute("login",
+							req.getParameter("user"));
+					resp.sendRedirect("/GRGABS/activitats");
+				} else
+					resp.sendRedirect("/GRGABS/login");
+				String usuari = "";
+
+				con.close();
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 }

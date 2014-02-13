@@ -13,14 +13,14 @@ public class CLogin implements Controller {
 	}
 
 	@Override
-	public String getPagina(String s) {
+	public String getPagina(String contextPath) {
 
 		try {
-			retorn = HTMLReader.getFile(new FileInputStream(s
+			retorn = HTMLReader.getFile(new FileInputStream(contextPath
 					+ "/header.html"));
-			retorn = retorn+HTMLReader.getFile(new FileInputStream(s
+			retorn = retorn+HTMLReader.getFile(new FileInputStream(contextPath
 					+ "/login.html"));
-			retorn = retorn+HTMLReader.getFile(new FileInputStream(s
+			retorn = retorn+HTMLReader.getFile(new FileInputStream(contextPath
 					+ "/footer.html"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
