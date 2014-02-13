@@ -1,6 +1,7 @@
 package DAO;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 
 import javax.naming.*;
 import javax.activation.DataSource;
@@ -10,6 +11,7 @@ import javax.naming.NamingException;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.MySQLConnection;
 import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.ResultSet;
 import com.mysql.jdbc.Statement;
 import com.mysql.jdbc.StatementImpl;
 import com.sun.xml.internal.bind.CycleRecoverable.Context;
@@ -39,8 +41,8 @@ public class SociJNDIDAO implements IDAOSoci{
 			s.setString(4, soci.getCog2());
 			s.setString(5, soci.getPasw());
 			s.setString(6, soci.getAdreca());
-			s.setDate(7, soci.getData_naixement());
-			s.setDate(8, soci.getData_alta());
+			s.setDate(7, new java.sql.Date(soci.getData_naixement().getTime().getTime()));
+			s.setDate(8, new java.sql.Date(soci.getData_alta().getTime().getTime()));
 
 			s.execute(queryString);
 
@@ -66,7 +68,7 @@ public class SociJNDIDAO implements IDAOSoci{
 			s.setString(3, soci.getCog2());
 			s.setString(4, soci.getPasw());
 			s.setString(5, soci.getAdreca());
-			s.setDate(6, soci.getData_naixement());
+			//s.setDate(6, soci.getData_naixement());
 			s.setString(7,soci.getDni());
 
 			s.execute();
@@ -104,6 +106,24 @@ public class SociJNDIDAO implements IDAOSoci{
 	@Override
 	public boolean isLogin(String Dni, String password) {
 		// TODO Auto-generated method stub
+		queryString = "SELECT COUNT (*) FROM SOCIS WHERE DNI=? AND PASW=?";
+		
+		try {
+			s = new PreparedStatement((MySQLConnection) c,queryString);
+			
+			s.setString(1, Dni);
+			s.setString(2, password);
+			ResultSet rs;
+			rs = (ResultSet) s.executeQuery();
+			rs.next();
+			if(rs.getInt(0) == 1){
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 
