@@ -58,8 +58,8 @@ public class CPersonal implements Controller{
 		/***page += "footer";**/
 		try {
 			/*** Header ***/
-			/*page = HTMLReader.getFile(new FileInputStream(s
-					+ "/header.html"));*/
+			page = HTMLReader.getFile(new FileInputStream(s
+					+ "/header.html"));
 			/*** Soci Persnal Info ***/
 			page = page+getSociPersonalInfo(s, dni);			
 			/*** Soci Personal Activities ***/
