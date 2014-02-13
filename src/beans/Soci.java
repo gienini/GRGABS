@@ -12,6 +12,7 @@ public class Soci {
 	private Calendar data_naix;
 	private Calendar data_alta;
 	private String foto;
+	private String pasw;
 	
 	public Soci() {
 		
@@ -25,6 +26,7 @@ public class Soci {
 		this.data_naix=data_naix;
 		this.data_alta=data_alta;
 		this.foto=foto;
+		this.pasw=pasw;
 	}
 
 	public String getDni() {
@@ -74,6 +76,12 @@ public class Soci {
 	}
 	public void setFoto(String foto) {
 		this.foto = foto;
+	}
+	public String getPasw() {
+		return pasw;
+	}
+	public void setPasw(String pasw) {
+		this.pasw = pasw;
 	}
 	
 	
