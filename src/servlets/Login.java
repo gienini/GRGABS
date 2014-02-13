@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import controladors.CLogin;
 import controladors.CRegistre;
 import controladors.Controller;
+import factories.SociFactory;
 
 /**
  * Clase per a la gestio de les vistes de login i registre
@@ -25,7 +26,7 @@ public class Login extends HttpServlet {
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		context = config.getServletContext().getRealPath("/static");
+		context = config.getServletContext().getRealPath("/staticlogin");
 	}
 
 	@Override
@@ -67,5 +68,28 @@ public class Login extends HttpServlet {
 		}
 
 		pw.write(pagina);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		/**
+		 * Si el valor de "user" al formulari post es diferent de null
+		 * significara que aquesta clau conte el DNI del usuari
+		 * 
+		 */
+		try {
+			if (!req.getParameter("user").equals(null)) {
+				// TODO FUNCIONAMIENT DEL LOGIN
+				// Usuari u = SociFactory
+				
+				String usuari = "";
+				req.getSession().setAttribute("login", usuari);
+				resp.sendRedirect("FUNCIONA");
+			}
+		} catch (Exception e) {
+
+		}
+
 	}
 }
