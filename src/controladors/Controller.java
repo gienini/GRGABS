@@ -9,5 +9,4 @@ package controladors;
 public interface Controller {
 
 	public String getPagina(String s);
-	public String getPagina(String s, String dni);
 }

@@ -17,16 +17,16 @@ public class Soci {
 	public Soci() {
 		
 	}
-	public Soci(String dni, String nom, String cog1, String cog2, String adreca, Calendar data_naix, Calendar data_alta, String foto) {
+	public Soci(String dni, String nom, String cog1, String cog2, String adreca, Calendar data_naix, Calendar data_alta, String foto, String paswd) {
 		this.dni=dni;
 		this.nom=nom;
-		this.cog1=cog2;
+		this.cog1=cog1;
 		this.cog2=cog2;
 		this.adreca=adreca;
 		this.data_naix=data_naix;
 		this.data_alta=data_alta;
 		this.foto=foto;
-		this.pasw=pasw;
+		this.pasw=paswd;
 	}
 
 	public String getDni() {
