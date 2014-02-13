@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 
 import factories.SociFactory;
 import DAO.SociJNDIDAO;
+import beans.Activitat;
 import beans.Soci;
 
 public class CPersonal implements Controller{
@@ -57,8 +58,8 @@ public class CPersonal implements Controller{
 		/***page += "footer";**/
 		try {
 			/*** Header ***/
-			/*page = HTMLReader.getFile(new FileInputStream(s
-					+ "/header.html"));*/
+			page = HTMLReader.getFile(new FileInputStream(s
+					+ "/header.html"));
 			/*** Soci Persnal Info ***/
 			page = page+getSociPersonalInfo(s, dni);			
 			/*** Soci Personal Activities ***/
@@ -127,14 +128,22 @@ public class CPersonal implements Controller{
 	}
 	
 	private String getSociPersonalActivitats(String s) {
-		String content = "content";
-		try {
-			content = HTMLReader.getFile(new FileInputStream(s
-					+ "/login.html"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
+		String content = "";
+		String line = "";
+		
+		/***Get the soci **/
+		SociJNDIDAO socijndi = new SociJNDIDAO(con);
+		SociFactory socif = new SociFactory();
+		Soci soci = socif.crearSoci();
+		soci = socijndi.getSoci(dni);
+		Activitat[] activitats = socijndi.getActivitats(soci);
+		
+		for(Activitat activitat : activitats)
+		{
+			line = "<div>"+activitat.getNom()+" "+activitat.getDescripcio()+" "+activitat.getEspai()+" "+ activitat.getData_realitzacio()+" "+ activitat.getHora() +"</div>";
+			content = content + line;
+		}
+		
 		return content;
 	}
 

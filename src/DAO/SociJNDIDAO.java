@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.GregorianCalendar;
 
+import factories.SociFactory;
 import beans.Activitat;
 import beans.Soci;
 
@@ -13,7 +15,7 @@ public class SociJNDIDAO implements IDAOSoci {
 
 	private Connection conexio;
 	private PreparedStatement s = null;
-
+	public SociFactory socifactory = new SociFactory();
 	public SociJNDIDAO(Connection c) {
 	 conexio = c;
 	}
@@ -21,7 +23,7 @@ public class SociJNDIDAO implements IDAOSoci {
 	@Override
 	public void add(Soci soci) {
 
-		queryString = "INSERT INTO soci(DNI, NOM, COGNOM1, COGNOM2,PASW,ADRECA,DATA_NAIX,DATA_ALTA) VALUES(?,?,?,?,?,?,?,?)";
+		queryString = "INSERT INTO socis(DNI, NOM, COGNOM1, COGNOM2,NICKNAME,PASW,ADRECA,DATA_NAIX,DATA_ALTA,FOTO) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
 		try {
 			s = conexio.prepareStatement(queryString);
@@ -30,14 +32,18 @@ public class SociJNDIDAO implements IDAOSoci {
 			s.setString(2, soci.getNom());
 			s.setString(3, soci.getCog1());
 			s.setString(4, soci.getCog2());
-			s.setString(5, soci.getPasw());
-			s.setString(6, soci.getAdreca());
-			s.setDate(7, new java.sql.Date(soci.getData_naixement().getTime()
+			//nickname es buit
+			s.setString(5, "");
+			s.setString(6, soci.getPasw());
+			s.setString(7, soci.getAdreca());
+			s.setDate(8, new java.sql.Date(soci.getData_naixement().getTime()
 					.getTime()));
-			s.setDate(8, new java.sql.Date(soci.getData_alta().getTime()
+			s.setDate(9, new java.sql.Date(soci.getData_alta().getTime()
 					.getTime()));
+			s.setString(10, soci.getFoto());
+			
 
-			s.execute(queryString);
+			s.executeUpdate();
 
 			s.close();
 			conexio.close();
@@ -50,7 +56,7 @@ public class SociJNDIDAO implements IDAOSoci {
 	@Override
 	public void update(Soci soci) {
 
-		queryString = "UPDATE soci SET NOM = ?, COGNOM1 = ?, COGNOM2 = ?, PASW = ? ,ADRECA = ?,DATA_NAIX = ? WHERE DNI = ?";
+		queryString = "UPDATE socis SET NOM = ?, COGNOM1 = ?, COGNOM2 = ?, PASW = ? ,ADRECA = ?,DATA_NAIX = ?,FOTO=? WHERE DNI = ?";
 
 		try {
 
@@ -61,10 +67,12 @@ public class SociJNDIDAO implements IDAOSoci {
 			s.setString(3, soci.getCog2());
 			s.setString(4, soci.getPasw());
 			s.setString(5, soci.getAdreca());
-			// s.setDate(6, soci.getData_naixement());
-			s.setString(7, soci.getDni());
+			s.setDate(6, new java.sql.Date(soci.getData_naixement().getTime()
+					.getTime()));
+			s.setString(7, soci.getFoto());
+			s.setString(8, soci.getDni());
 
-			s.execute();
+			s.executeUpdate();
 
 			s.close();
 			conexio.close();
@@ -76,13 +84,13 @@ public class SociJNDIDAO implements IDAOSoci {
 
 	@Override
 	public void delete(Soci soci) {
-		queryString = "DELETE FROM soci WHERE dni = ?";
+		queryString = "DELETE FROM socis WHERE dni = ?";
 
 		try {
 			s = conexio.prepareStatement(queryString);
 			s.setString(1, soci.getDni());
 
-			s.execute();
+			s.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -91,8 +99,35 @@ public class SociJNDIDAO implements IDAOSoci {
 	}
 
 	@Override
-	public void getSoci(String dni) {
-
+	public Soci getSoci(String dni) {
+		Soci soc = null;
+		queryString = "SELECT nom,cognom1,cognom2,pasw,adreca,data_naix,data_alta,foto FROM socis WHERE dni = ?";
+		try {
+			s = conexio.prepareStatement(queryString);
+			s.setString(1, dni);
+			ResultSet rs = s.executeQuery();
+			rs.next();
+			GregorianCalendar data_naix = new GregorianCalendar();
+			data_naix.setTime(rs.getDate(6));
+			GregorianCalendar data_alta = new GregorianCalendar();
+			data_alta.setTime(rs.getDate(7));
+			soc = socifactory.crearSoci(
+					dni,
+					rs.getString(1),//nom
+					rs.getString(2),//cognom
+					rs.getString(3),//cog2
+					rs.getString(5),//adreca
+					data_naix,//naix
+					data_alta,//data_alta
+					rs.getString(8),
+					rs.getString(4));
+			
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return soc;
+		
 	}
 
 	@Override

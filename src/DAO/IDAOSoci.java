@@ -7,7 +7,7 @@ public interface IDAOSoci {
 		public void add(Soci soci);
 		public void update(Soci soci);
 		public void delete(Soci soci);
-		public void getSoci(String dni);
+		public Soci getSoci(String dni);
 		public boolean isLogin(String Dni, String password);
 		public void joinActivitat(Soci soci, Activitat act);
 		public void leaveActivitat(Soci soci, Activitat act);

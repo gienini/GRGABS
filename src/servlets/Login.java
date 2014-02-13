@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import beans.Soci;
 import DAO.SociJNDIDAO;
+import beans.Soci;
 import controladors.CLogin;
 import controladors.CRegistre;
 import controladors.Controller;
@@ -119,45 +119,45 @@ public class Login extends HttpServlet {
 				 * 
 				 */
 				SociJNDIDAO login = new SociJNDIDAO(con);
-				if (login.isLogin(req.getParameter("user"),
-						req.getParameter("pass"))) {
-					/**
-					 * S'inicialitza el valor de la sesio "login" amb el DNI de
-					 * l'usuari
-					 * 
-					 */
-					req.getSession().setAttribute("login",
-							req.getParameter("user"));
-					resp.sendRedirect("/GRGABS/activitats");
-				} else {
-
-					resp.sendRedirect("/GRGABS/login");
-				}
+				// if (login.isLogin(req.getParameter("user"),
+				// req.getParameter("pass"))) {
+				// /**
+				// * S'inicialitza el valor de la sesio "login" amb el DNI de
+				// * l'usuari
+				// *
+				// */
+				// req.getSession().setAttribute("login",
+				// req.getParameter("user"));
+				// resp.sendRedirect("/GRGABS/activitats");
+				// } else {
+				//
+				// resp.sendRedirect("/GRGABS/login");
+				// }
 				String usuari = "";
-
-				con.close();
-
-			} else if (!(req.getParameter("nom").equals(null)
-					&& req.getParameter("cognom1").equals(null)
-					&& req.getParameter("cognom2").equals(null)
-					&& req.getParameter("dni").equals(null)
-					&& req.getParameter("adreca").equals(null)
-					&& req.getParameter("data-naix").equals(null) && req
-					.getParameter("passR").equals(null))) {
-				SociJNDIDAO registre = new SociJNDIDAO(contextConnection());
-
-				Soci s = new Soci(req.getParameter("dni"),
-						req.getParameter("nom"), req.getParameter("cognom1"),
-						req.getParameter("cognom2"),
-						req.getParameter("adreca"), new GregorianCalendar(2000,
-								5, 5), new GregorianCalendar(2000, 5, 5), "");
-				s.setPasw(req.getParameter("passR"));
-				registre.add(s);
 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		if (!(req.getParameter("nom").equals(null)
+				&& req.getParameter("cognom1").equals(null)
+				&& req.getParameter("cognom2").equals(null)
+				&& req.getParameter("dni").equals(null)
+				&& req.getParameter("adreca").equals(null)
+				&& req.getParameter("data-naix").equals(null) && req
+				.getParameter("passR").equals(null))) {
+			SociJNDIDAO registre = new SociJNDIDAO(contextConnection());
+
+			SociFactory s = new SociFactory();
+			Soci soc = s.crearSoci(req.getParameter("dni"), req
+					.getParameter("nom"), req.getParameter("cognom1"), req
+					.getParameter("cognom2"), req.getParameter("adreca"),
+					new GregorianCalendar(2000, 5, 5), new GregorianCalendar(
+							2000, 5, 5), "", req.getParameter("passR"));
+			registre.add(soc);
+
+		} else
+			resp.sendRedirect("/ERROR");
 
 	}
 }
