@@ -19,7 +19,6 @@ import javax.sql.DataSource;
 import DAO.SociJNDIDAO;
 import beans.Soci;
 import controladors.CLogin;
-import controladors.CRegistre;
 import controladors.Controller;
 import factories.SociFactory;
 
@@ -35,6 +34,10 @@ public class Login extends HttpServlet {
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
+		/**
+		 * Inicialitzador de la String context, que conte la ruta a l'arrel del
+		 * sistema de fitxers del servidor d'aplicacions
+		 */
 		context = config.getServletContext().getRealPath("/");
 	}
 
@@ -54,31 +57,20 @@ public class Login extends HttpServlet {
 		String params = "";
 		PrintWriter pw = resp.getWriter();
 		/**
-		 * Comparacio: formulari de registre o de login
-		 * 
-		 * CATCH per mirar el contingut de get. s'incloura el parametre
-		 * "registre" al get per accedir a la pagina de registre totes les
-		 * altres opcions portaran a la pagina de login
-		 * 
+		 * Carreguem la vista de login desde el seu controlador
 		 */
-
-		try {
-			if (req.getParameterNames().nextElement().equals("registre")) {
-				controlador = new CRegistre();
-				pagina = controlador.getPagina(context);
-
-			} else {
-				controlador = new CLogin();
-				pagina = controlador.getPagina(context);
-			}
-		} catch (Exception e) {
-			controlador = new CLogin();
-			pagina = controlador.getPagina(context);
-		}
+		controlador = new CLogin();
+		pagina = controlador.getPagina(context);
 
 		pw.write(pagina);
 	}
 
+	/**
+	 * Funcio per a la obtencio de la conexio a la base de dades, solament es
+	 * pot executar desde un servlet
+	 * 
+	 * @return Connection per a la BD
+	 */
 	private Connection contextConnection() {
 		Context init;
 		try {
@@ -119,20 +111,24 @@ public class Login extends HttpServlet {
 				 * 
 				 */
 				SociJNDIDAO login = new SociJNDIDAO(con);
-				// if (login.isLogin(req.getParameter("user"),
-				// req.getParameter("pass"))) {
-				// /**
-				// * S'inicialitza el valor de la sesio "login" amb el DNI de
-				// * l'usuari
-				// *
-				// */
-				// req.getSession().setAttribute("login",
-				// req.getParameter("user"));
-				// resp.sendRedirect("/GRGABS/activitats");
-				// } else {
-				//
-				// resp.sendRedirect("/GRGABS/login");
-				// }
+
+				/**
+				 * Comprovacio de login
+				 */
+				if (login.isLogin(req.getParameter("user"),
+						req.getParameter("pass"))) {
+					/**
+					 * S'inicialitza el valor de la sesio "login" amb el DNI de
+					 * l'usuari
+					 * 
+					 */
+					req.getSession().setAttribute("login",
+							req.getParameter("user"));
+					resp.sendRedirect("/GRGABS/activitats");
+				} else {
+
+					resp.sendRedirect("/GRGABS/login");
+				}
 				String usuari = "";
 
 			}

@@ -2,7 +2,11 @@ package controladors;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
+/**
+ * Classe controlador de les vistes de login
+ * @author Fran Gienini
+ *
+ */
 public class CLogin implements Controller {
 
 	private String retorn;
@@ -14,15 +18,15 @@ public class CLogin implements Controller {
 
 	@Override
 	public String getPagina(String contextPath) {
-		String path = "staticlogin/";
+		contextPath = contextPath + "staticlogin/";
 		try {
-			retorn = HTMLReader.getFile(new FileInputStream(contextPath + path
+			retorn = HTMLReader.getFile(new FileInputStream(contextPath
 					+ "/header.html"));
 			retorn = retorn
-					+ HTMLReader.getFile(new FileInputStream(contextPath + path
+					+ HTMLReader.getFile(new FileInputStream(contextPath
 							+ "/body.html"));
 			retorn = retorn
-					+ HTMLReader.getFile(new FileInputStream(contextPath + path
+					+ HTMLReader.getFile(new FileInputStream(contextPath
 							+ "/footer.html"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
