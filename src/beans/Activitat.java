@@ -21,6 +21,15 @@ public class Activitat {
 		{
 	
 		}
+		/**
+		 * Metode constructor que inicialitza un objecte de classe Activitat.
+		 * @param nom Nom que tindra l'activitat
+		 * @param descripcio Descripcio de l'activitat
+		 * @param dia Dia en que es realitzarà la activitat
+		 * @param hora Hora en que es realitzarà l'activitat
+		 * @param espai Espai en es dura a terme l'activitat
+		 * @param senior Tipus de socis que podran accedir a la activitat
+		 */
 		public Activitat(String nom, String descripcio, Calendar dia, Timestamp hora, String espai, boolean senior)
 		{
 			this.nom=nom;
@@ -30,6 +39,10 @@ public class Activitat {
 			this.espai=espai;
 			this.senior=senior;
 		}
+		/**
+		 * Getters i setters del Bean Activitat.
+		 */
+		
 		public String getNom() {
 			return nom;
 		}

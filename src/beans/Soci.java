@@ -13,10 +13,24 @@ public class Soci {
 	private Calendar data_alta;
 	private String foto;
 	private String pasw;
-	
+	/**
+	 * Metode constructor del Bean Soci sense parametres.
+	 */
 	public Soci() {
 		
 	}
+	/**
+	 * Metode constructor que inicialitza un objecte de tipus Soci amb els seguents atributs.
+	 * @param dni DNI del nou soci
+	 * @param nom Nom del nou soci
+	 * @param cog1 Primer cognom del nou soci
+	 * @param cog2 Segon cognom del nou soci
+	 * @param adreca Adreça del nou soci
+	 * @param data_naix Data de naeixement del nou soci
+	 * @param data_alta Data d'alta del nou soci
+	 * @param foto Foto del nou soci
+	 * @param paswd Contrassenya del nou soci
+	 */
 	public Soci(String dni, String nom, String cog1, String cog2, String adreca, Calendar data_naix, Calendar data_alta, String foto, String paswd) {
 		this.dni=dni;
 		this.nom=nom;
@@ -29,6 +43,10 @@ public class Soci {
 		this.pasw=paswd;
 	}
 
+	/**
+	 *Setters i getter del Bean Soci. 
+	 * 
+	 */
 	public String getDni() {
 		return dni;
 	}
