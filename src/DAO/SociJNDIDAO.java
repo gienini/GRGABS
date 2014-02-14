@@ -11,8 +11,8 @@ import beans.Activitat;
 import beans.Soci;
 
 public class SociJNDIDAO implements IDAOSoci {
+    private final String SOCISTABLENAME="socis";
 	private String queryString;
-
 	private Connection conexio;
 	private PreparedStatement s = null;
 	public SociFactory socifactory = new SociFactory();
@@ -23,7 +23,7 @@ public class SociJNDIDAO implements IDAOSoci {
 	@Override
 	public void add(Soci soci) {
 
-		queryString = "INSERT INTO socis(DNI, NOM, COGNOM1, COGNOM2,NICKNAME,PASW,ADRECA,DATA_NAIX,DATA_ALTA,FOTO) VALUES(?,?,?,?,?,?,?,?,?,?)";
+		queryString = "INSERT INTO " + SOCISTABLENAME + "(DNI, NOM, COGNOM1, COGNOM2,NICKNAME,PASW,ADRECA,DATA_NAIX,DATA_ALTA,FOTO) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
 		try {
 			s = conexio.prepareStatement(queryString);
@@ -56,7 +56,7 @@ public class SociJNDIDAO implements IDAOSoci {
 	@Override
 	public void update(Soci soci) {
 
-		queryString = "UPDATE socis SET NOM = ?, COGNOM1 = ?, COGNOM2 = ?, PASW = ? ,ADRECA = ?,DATA_NAIX = ?,FOTO=? WHERE DNI = ?";
+		queryString = "UPDATE " + SOCISTABLENAME + " SET NOM = ?, COGNOM1 = ?, COGNOM2 = ?, PASW = ? ,ADRECA = ?,DATA_NAIX = ?,FOTO=? WHERE DNI = ?";
 
 		try {
 
@@ -84,7 +84,7 @@ public class SociJNDIDAO implements IDAOSoci {
 
 	@Override
 	public void delete(Soci soci) {
-		queryString = "DELETE FROM socis WHERE dni = ?";
+		queryString = "DELETE FROM  " + SOCISTABLENAME + " WHERE dni = ?";
 
 		try {
 			s = conexio.prepareStatement(queryString);
@@ -101,7 +101,7 @@ public class SociJNDIDAO implements IDAOSoci {
 	@Override
 	public Soci getSoci(String dni) {
 		Soci soc = null;
-		queryString = "SELECT nom,cognom1,cognom2,pasw,adreca,data_naix,data_alta,foto FROM socis WHERE dni = ?";
+		queryString = "SELECT nom,cognom1,cognom2,pasw,adreca,data_naix,data_alta,foto FROM " + SOCISTABLENAME + " socis WHERE dni = ?";
 		try {
 			s = conexio.prepareStatement(queryString);
 			s.setString(1, dni);
