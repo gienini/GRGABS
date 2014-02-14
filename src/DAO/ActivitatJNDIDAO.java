@@ -151,6 +151,5 @@ public class ActivitatJNDIDAO implements IDAOActivitat{
 			e.printStackTrace();
 		}
 		return llistaActivitats;
-		
 	}
 }
