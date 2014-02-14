@@ -10,32 +10,40 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import controladors.CActivitats;
+import controladors.CLogin;
+import controladors.Controller;
 
 public class Activitats extends HttpServlet {
 	private String context;
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		context = config.getServletContext().getRealPath("/");
+		context = config.getServletContext().getRealPath("/staticactivitats");
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-
+		/**
+		 * Inicialitzacio de variables
+		 * 
+		 */
+		String pagina = "";
+		Controller controlador = null;
 		PrintWriter pw = resp.getWriter();
 
-		try {
-
-			if (req.getSession().getAttribute("login").equals("nologin")) {
-				resp.sendRedirect("/GRGABS/login");
+		try{
+			if(req.getSession().getAttribute("login").equals("nologin")){
+				controlador = new CActivitats();
+				pagina = controlador.getPagina(context);
+				pw.print(pagina);
 			}
 		} catch (Exception e) {
-			resp.sendRedirect("/GRGABS/login");
+			controlador = new CLogin();
+			pagina = controlador.getPagina(context);
 		}
-		CActivitats cont = new CActivitats();
-
-		pw.write(cont.getPagina(context));
+		pw.print(pagina);
+			
 
 	}
 
