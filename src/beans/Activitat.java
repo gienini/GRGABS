@@ -39,6 +39,7 @@ public class Activitat {
 			this.espai=espai;
 			this.senior=senior;
 		}
+		
 		/**
 		 * Getters i setters del Bean Activitat.
 		 */

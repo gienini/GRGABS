@@ -47,6 +47,7 @@ public class Soci {
 	 *Setters i getter del Bean Soci. 
 	 * 
 	 */
+	
 	public String getDni() {
 		return dni;
 	}
