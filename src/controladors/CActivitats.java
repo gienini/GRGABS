@@ -61,10 +61,10 @@ public class CActivitats implements Controller{
 			page = HTMLReader.getFile(new FileInputStream(s
 					+ "/header.html"));			
 			/*** Soci Personal Activities ***/
-			page = page+getSociActivitats(s);
+			page = page+getSociActivitats();
 			/*** Footer ***/
 			page = page+HTMLReader.getFile(new FileInputStream(s
-					+ "/profile.html"));
+					+ "/footer.html"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -72,47 +72,24 @@ public class CActivitats implements Controller{
 
 	}
 
-	private String getSociActivitats(String s) {
+	private String getSociActivitats() {
 		String content = "";
-		String line = "";
 		String activity = "";
 		/***Get the soci **/
 		ActivitatJNDIDAO activitatjndi = new ActivitatJNDIDAO(con);
 		Activitat[] activitats = activitatjndi.getAll();
-		try {
-			BufferedReader read = new BufferedReader(new FileReader(s + "/bodyLoginOn.html"));
-			try {
-				line = read.readLine();
-				while(line != null){
-					//We need to find if the line contains a value
-					if(line.contains("%activitat:info_activitat%")){
-						for(Activitat activitat : activitats)
-						{						
-							activity = "<div class='col-md-12 margintop marginbot'><h3>Activitat: "+activitat.getNom()+" </h3>"
-									+ "<p>"+activitat.getDescripcio()+" </p>"
-											+ "<button type='button' class='btn btn-primary'>Més info</button>"
-											+ "<button type='button' class='btn btn-success'>Apunta'm-hi</button>"
-											+ "<button type='button' class='btn btn-danger'>Cancela activitat"
-											+ "</button></div>";
-							content = content + line.replaceAll("%activitat:info_activitat%", activity);
-						}
-						//line = line.replaceAll("%personal:variable%", "Hello World");
-					} 
-					content = content + line;
-					line = read.readLine();
-				}
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		for(Activitat activitat : activitats)
+		{						
+			activity = "<div class='col-md-12 margintop marginbot'><h3>Activitat: "+activitat.getNom()+" </h3>"
+							+ "<p>"+activitat.getDescripcio()+" </p>"
+							+ "<button type='button' class='btn btn-primary'>Més info</button>"
+							+ "<button type='button' class='btn btn-success'>Apunta'm-hi</button>"
+							+ "<button type='button' class='btn btn-danger'>Cancela activitat"
+							+ "</button></div>";
+							content = content + activity;
 		}
 		
-		return content;
+		return "Activitats";
 	}
 
 	@Override
