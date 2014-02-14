@@ -27,7 +27,7 @@ import factories.SociFactory;
  * 
  * @author Fran Gienini
  * 
- */
+ */ 
 public class Login extends HttpServlet {
 
 	private String context;
@@ -38,7 +38,7 @@ public class Login extends HttpServlet {
 		 * Inicialitzador de la String context, que conte la ruta a l'arrel del
 		 * sistema de fitxers del servidor d'aplicacions
 		 */
-		context = config.getServletContext().getRealPath("/");
+		context = config.getServletContext().getRealPath("/staticlogin");
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class Login extends HttpServlet {
 				 * Comprovacio de login
 				 */
 				if (login.isLogin(req.getParameter("user"),
-						req.getParameter("pass"))) {
+						req.getParameter("passw"))) {
 					/**
 					 * S'inicialitza el valor de la sesio "login" amb el DNI de
 					 * l'usuari
@@ -124,7 +124,7 @@ public class Login extends HttpServlet {
 					 */
 					req.getSession().setAttribute("login",
 							req.getParameter("user"));
-					resp.sendRedirect("/GRGABS/activitats");
+					resp.sendRedirect("/GRGABS/personal");
 				} else {
 
 					resp.sendRedirect("/GRGABS/login");
@@ -134,7 +134,7 @@ public class Login extends HttpServlet {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}try{
 		if (!(req.getParameter("nom").equals(null)
 				&& req.getParameter("cognom1").equals(null)
 				&& req.getParameter("cognom2").equals(null)
@@ -151,9 +151,10 @@ public class Login extends HttpServlet {
 					new GregorianCalendar(2000, 5, 5), new GregorianCalendar(
 							2000, 5, 5), "", req.getParameter("passR"));
 			registre.add(soc);
-
-		} else
-			resp.sendRedirect("/ERROR");
+ 
+		}}
+		catch (Exception e){
+		}
 
 	}
 }

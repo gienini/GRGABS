@@ -15,7 +15,6 @@ import controladors.CLogin;
 import controladors.CPersonal;
 import controladors.Controller;
 
-@WebServlet("/activitats")
 public class Activitats extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private String context;
@@ -39,22 +38,22 @@ public class Activitats extends HttpServlet {
 		PrintWriter pw = response.getWriter();
 
 		try{
-			//if(req.getSession().getAttribute("login").equals("nologin")){
+			if(!request.getSession().getAttribute("login").equals("nologin")){
 				controlador = new CActivitats();
 				pagina = controlador.getPagina(context);
-				//pw.print(pagina);
-			//}
+				pw.print(pagina);
+			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			controlador = new CLogin();
 			pagina = controlador.getPagina(context);
 		}
-		pw.print(pagina);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
+		this.doGet(req, resp);
 	}
 
 }

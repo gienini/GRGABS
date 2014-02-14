@@ -35,7 +35,7 @@ public class Personal extends HttpServlet {
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		context = config.getServletContext().getRealPath("/staticpersonal");
+		context = config.getServletContext().getRealPath("/staticactivitats");
 	}
 
 	/**
@@ -60,6 +60,7 @@ public class Personal extends HttpServlet {
 			controlador = new CPersonal();
 			pagina = controlador.getPagina(context, dni);
 		} catch (Exception e) {
+			e.printStackTrace();
 			controlador = new CLogin();
 			pagina = controlador.getPagina(context);
 		}

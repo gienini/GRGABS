@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -14,6 +15,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import factories.SociFactory;
+import DAO.ActivitatJNDIDAO;
 import DAO.SociJNDIDAO;
 import beans.Activitat;
 import beans.Soci;
@@ -62,10 +64,10 @@ public class CPersonal implements Controller{
 			/*** Soci Persnal Info ***/
 			page = page+getSociPersonalInfo(s, dni);			
 			/*** Soci Personal Activities ***/
-			page = page+getSociPersonalActivitats(s, dni);
+//			page = page+getSociPersonalActivitats(s, dni);
 			/*** Footer ***/
 			page = page+HTMLReader.getFile(new FileInputStream(s
-					+ "/profile.html"));
+					+ "/footer.html"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -92,9 +94,25 @@ public class CPersonal implements Controller{
 		String edat = "26";
 		try {
 			BufferedReader read = new BufferedReader(new FileReader(s + "/bodyLoginOn.html"));
+			ActivitatJNDIDAO act= new ActivitatJNDIDAO(con);
+			ArrayList<Activitat> activitats = act.getAll();
+			String activity ="";
 			try {
 				line = read.readLine();
 				while(line != null){
+					if(line.contains("%activitat:info_activitat%")){
+						for(Activitat activitat : activitats)
+						{						
+							activity = "<div class='col-md-12 margintop marginbot'><h3>Activitat: "+activitat.getNom()+" </h3>"
+									+ "<p>"+activitat.getDescripcio()+" </p>"
+											+ "<button type='button' class='btn btn-primary'>Més info</button>"
+											+ "<button type='button' class='btn btn-success'>Apunta'm-hi</button>"
+											+ "<button type='button' class='btn btn-danger'>Cancela activitat"
+											+ "</button></div>";
+							content = content + line.replaceAll("%activitat:info_activitat%", activity);
+						}
+						//line = line.replaceAll("%personal:variable%", "Hello World");
+					} 
 					//We need to find if the line contains a value
 					 if (line.contains("%personal:name%")){
 						line = line.replaceAll("%personal:name%", soci.getNom());
@@ -130,10 +148,12 @@ public class CPersonal implements Controller{
 		String activity = "";
 		/***Get the soci **/
 		SociJNDIDAO socijndi = new SociJNDIDAO(con);
+		
 		SociFactory socif = new SociFactory();
 		Soci soci = socif.crearSoci();
 		soci = socijndi.getSoci(dni);
-		Activitat[] activitats = socijndi.getActivitats(soci);
+		ActivitatJNDIDAO act= new ActivitatJNDIDAO(con);
+		ArrayList<Activitat> activitats = act.getAll();
 		try {
 			BufferedReader read = new BufferedReader(new FileReader(s + "/bodyLoginOn.html"));
 			try {

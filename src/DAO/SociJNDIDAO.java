@@ -166,9 +166,28 @@ public class SociJNDIDAO implements IDAOSoci {
 
 	}
 
+	
 	@Override
+	/**
+	 *COMPROVAR SI ESTÀ EN UNA ACTIVITAT AMB EL MATEIX NOM, OJU, QUE LA BASE DE DADES TÉ
+	 *UN CAMP  
+	 */
 	public boolean isOnActivitat(Soci soci, Activitat act) {
 		// TODO Auto-generated method stub
+		queryString ="SELECT COUNT(*) FROM SOCIS_ACTIVITATS WHERE SOCIS_ACTIVITATS.DNI='" + soci.getDni() + "' AND ID_ACTIVITAT=(SELECT ACTIVITATS.ID_ACTIVITAT FROM ACTIVITATS WHERE ACTIVITATS.NOM='" + act.getNom() + "');";
+		try {
+			s = conexio.prepareStatement(queryString);
+			ResultSet rs;
+			rs = (ResultSet) s.executeQuery();
+			rs.next();
+			if (rs.getInt(1) == 1) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 

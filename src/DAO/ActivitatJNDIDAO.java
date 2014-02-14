@@ -4,11 +4,11 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
-import com.mysql.jdbc.ResultSet;
-import com.mysql.jdbc.Statement;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 
 import factories.ActivitatFactory;
 import beans.Activitat;
@@ -18,7 +18,7 @@ public class ActivitatJNDIDAO implements IDAOActivitat{
 	private final String ACTIVITATTABLENAME = "activitats";
 	private Connection conexio;
 	private PreparedStatement s = null;
-	private Statement st = null;
+	
 
 	public ActivitatJNDIDAO(Connection c) {
 	 conexio = c;
@@ -103,21 +103,23 @@ public class ActivitatJNDIDAO implements IDAOActivitat{
 	 * les activitats de la taula activitats de la base de dades bbdd.
 	 */
 	@Override
-	public Activitat[] getAll() {
-		Activitat[] llistaActivitats = null;
+	public ArrayList<Activitat> getAll() {
 		int i = 0;
-		queryString = "SELECT * FROM" + ACTIVITATTABLENAME;
-		
+		queryString = "SELECT * FROM " + ACTIVITATTABLENAME;
+		ArrayList<Activitat> llistaActivitats = null;
 		try {
-			ResultSet rs = (ResultSet) st.executeQuery(queryString);
+			s = conexio.prepareStatement(queryString);
+			ResultSet rs = s.executeQuery();
+			llistaActivitats = new ArrayList<Activitat>();
+			ActivitatFactory af = af = new ActivitatFactory();
 			while(rs.next()){
-				ActivitatFactory af = null;
+				
 				
 				Calendar cal = new GregorianCalendar();
-				cal.setTime(rs.getDate(3));
+				cal.setTime(rs.getDate(4));
 				
-				llistaActivitats[i] = af.creaActivitat(rs.getString(1), rs.getString(2), cal, rs.getTimestamp(4),rs.getString(5),rs.getBoolean(6));
-				i++;
+				llistaActivitats.add(af.creaActivitat(rs.getString(2), rs.getString(3), cal, rs.getTimestamp(5),rs.getString(6),rs.getBoolean(7)));
+		
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -130,21 +132,23 @@ public class ActivitatJNDIDAO implements IDAOActivitat{
 	 * de la base de dades activitats.
 	 */
 	@Override
-	public Activitat[] getAllNoSenior() {
-		Activitat[] llistaActivitats = null;
+	public ArrayList<Activitat> getAllNoSenior() {
 		int i = 0;
-		queryString = "SELECT * FROM" + ACTIVITATTABLENAME + " WHERE SENIOR = 0";
-		
+		queryString = "SELECT * FROM " + ACTIVITATTABLENAME + " WHERE SENIOR = FALSE";
+		ArrayList<Activitat> llistaActivitats = null;
 		try {
-			ResultSet rs = (ResultSet) st.executeQuery(queryString);
+			s = conexio.prepareStatement(queryString);
+			ResultSet rs = s.executeQuery();
+			llistaActivitats = new ArrayList<Activitat>();
+			ActivitatFactory af = af = new ActivitatFactory();
 			while(rs.next()){
-				ActivitatFactory af = null;
+				
 				
 				Calendar cal = new GregorianCalendar();
-				cal.setTime(rs.getDate(3));
+				cal.setTime(rs.getDate(4));
 				
-				llistaActivitats[i] = af.creaActivitat(rs.getString(1), rs.getString(2), cal, rs.getTimestamp(4),rs.getString(5),rs.getBoolean(6));
-				i++;
+				llistaActivitats.add(af.creaActivitat(rs.getString(2), rs.getString(3), cal, rs.getTimestamp(5),rs.getString(6),rs.getBoolean(7)));
+		
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
