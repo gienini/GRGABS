@@ -52,10 +52,9 @@ public class CPersonal implements Controller{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		/*** Header ***/
+		
 		String page = "" ;
-		/*** Footer ***/
-		/***page += "footer";**/
+
 		try {
 			/*** Header ***/
 			page = HTMLReader.getFile(new FileInputStream(s
@@ -63,7 +62,7 @@ public class CPersonal implements Controller{
 			/*** Soci Persnal Info ***/
 			page = page+getSociPersonalInfo(s, dni);			
 			/*** Soci Personal Activities ***/
-			page = page+getSociPersonalActivitats(s);
+			page = page+getSociPersonalActivitats(s, dni);
 			/*** Footer ***/
 			page = page+HTMLReader.getFile(new FileInputStream(s
 					+ "/profile.html"));
@@ -97,9 +96,7 @@ public class CPersonal implements Controller{
 				line = read.readLine();
 				while(line != null){
 					//We need to find if the line contains a value
-					if(line.contains("%personal:variable%")){
-						line = line.replaceAll("%personal:variable%", "Hello World");
-					} else if (line.contains("%personal:name%")){
+					 if (line.contains("%personal:name%")){
 						line = line.replaceAll("%personal:name%", soci.getNom());
 					} else if (line.contains("%personal:cog1%")){
 						line = line.replaceAll("%personal:cog1%", soci.getCog1() +" "+soci.getCog2());
@@ -127,10 +124,10 @@ public class CPersonal implements Controller{
 		return content;
 	}
 	
-	private String getSociPersonalActivitats(String s) {
+	private String getSociPersonalActivitats(String s, String dni) {
 		String content = "";
 		String line = "";
-		
+		String activity = "";
 		/***Get the soci **/
 		SociJNDIDAO socijndi = new SociJNDIDAO(con);
 		SociFactory socif = new SociFactory();
@@ -145,12 +142,14 @@ public class CPersonal implements Controller{
 					//We need to find if the line contains a value
 					if(line.contains("%activitat:info_activitat%")){
 						for(Activitat activitat : activitats)
-						{
-							/**
-							 * Generar tot el div d'activitats
-							 */
-							line = "<div>"+activitat.getNom()+" "+activitat.getDescripcio()+" "+activitat.getEspai()+" "+ activitat.getData_realitzacio()+" "+ activitat.getHora() +"</div>";
-							content = content + line.replaceAll("%personal:variable%", "Hello World");
+						{						
+							activity = "<div class='col-md-12 margintop marginbot'><h3>Activitat: "+activitat.getNom()+" </h3>"
+									+ "<p>"+activitat.getDescripcio()+" </p>"
+											+ "<button type='button' class='btn btn-primary'>Més info</button>"
+											+ "<button type='button' class='btn btn-success'>Apunta'm-hi</button>"
+											+ "<button type='button' class='btn btn-danger'>Cancela activitat"
+											+ "</button></div>";
+							content = content + line.replaceAll("%activitat:info_activitat%", activity);
 						}
 						//line = line.replaceAll("%personal:variable%", "Hello World");
 					} 

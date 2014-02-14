@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import controladors.CLogin;
 import controladors.CPersonal;
-import controladors.CRegistre;
 import controladors.Controller;
 
 /**

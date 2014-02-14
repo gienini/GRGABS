@@ -27,4 +27,9 @@ public class SociFactory {
 		}
 
 	}
+
+	public Soci crearSoci() {
+		// TODO Auto-generated method stub
+		return new Soci();
+	}
 }

@@ -34,4 +34,10 @@ public class CLogin implements Controller {
 		return retorn;
 	}
 
+	@Override
+	public String getPagina(String s, String dni) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
