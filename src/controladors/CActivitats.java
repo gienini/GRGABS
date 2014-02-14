@@ -63,9 +63,10 @@ public class CActivitats implements Controller {
 		/*** Get the soci **/
 		ActivitatJNDIDAO activitatjndi = new ActivitatJNDIDAO(con);
 		ArrayList<Activitat> activitats = activitatjndi.getAll();
+		content="<div class='container marginbot'>";
 		for (Activitat activitat : activitats) {
 			System.out.println(activitat.getNom());
-			activity = "<div class='col-md-12 margintop marginbotn container'><h3>Activitat: "
+			activity = "<div class='col-md-4 margintop marginbot'><h3>Activitat: "
 					+ activitat.getNom()
 					+ " </h3>"
 					+ "<p>"
@@ -77,6 +78,7 @@ public class CActivitats implements Controller {
 					+ "</button></div>";
 			content = content + activity;
 		}
+		content = content+"</div>";
 
 		return content;
 	}

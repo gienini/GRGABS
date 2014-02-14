@@ -27,7 +27,7 @@ import factories.SociFactory;
  * 
  * @author Fran Gienini
  * 
- */ 
+ */
 public class Login extends HttpServlet {
 
 	private String context;
@@ -133,28 +133,29 @@ public class Login extends HttpServlet {
 
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-		}try{
-		if (!(req.getParameter("nom").equals(null)
-				&& req.getParameter("cognom1").equals(null)
-				&& req.getParameter("cognom2").equals(null)
-				&& req.getParameter("dni").equals(null)
-				&& req.getParameter("adreca").equals(null)
-				&& req.getParameter("data-naix").equals(null) && req
-				.getParameter("passR").equals(null))) {
-			SociJNDIDAO registre = new SociJNDIDAO(contextConnection());
-
-			SociFactory s = new SociFactory();
-			Soci soc = s.crearSoci(req.getParameter("dni"), req
-					.getParameter("nom"), req.getParameter("cognom1"), req
-					.getParameter("cognom2"), req.getParameter("adreca"),
-					new GregorianCalendar(2000, 5, 5), new GregorianCalendar(
-							2000, 5, 5), "", req.getParameter("passR"));
-			registre.add(soc);
- 
-		}}
-		catch (Exception e){
 		}
+		try {
+			if (!(req.getParameter("nom").equals(null)
+					&& req.getParameter("cognom1").equals(null)
+					&& req.getParameter("cognom2").equals(null)
+					&& req.getParameter("dni").equals(null)
+					&& req.getParameter("adreca").equals(null)
+					&& req.getParameter("data-naix").equals(null) && req
+					.getParameter("passR").equals(null))) {
+				SociJNDIDAO registre = new SociJNDIDAO(contextConnection());
+
+				SociFactory s = new SociFactory();
+				Soci soc = s.crearSoci(req.getParameter("dni"), req
+						.getParameter("nom"), req.getParameter("cognom1"), req
+						.getParameter("cognom2"), req.getParameter("adreca"),
+						new GregorianCalendar(2000, 5, 5),
+						new GregorianCalendar(2000, 5, 5), "", req
+								.getParameter("passR"));
+				registre.add(soc);
+				resp.sendRedirect("/GRGABS/login");
+			}
+		} catch (Exception e) {
+		} 
 
 	}
 }

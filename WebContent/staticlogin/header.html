@@ -1,66 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Club de socis</title>
+<head>
 
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-	
+<script language="javascript">
+	function validateForm() {
+		var x = document.forms["form"]["nom"].value;
+		if (x == null || x == "") {
+			alert("Nom incorrecte!");
+			return false;
+		}
+		var x = document.forms["form"]["cognom1"].value;
+		if (x == null || x == "") {
+			alert("Cognom 1 incorrecte!");
+			return false;
+		}
+		var x = document.forms["form"]["cognom2"].value;
+		if (x == null || x == "") {
+			alert("Cognom 2 incorrecte!");
+			return false;
+		}
+		var x = document.forms["form"]["dni"].value;
+		if (x == null || x == "") {
+			alert("DNI incorrecte!");
+			return false;
+		}
+		var x = document.forms["form"]["adreca"].value;
+		if (x == null || x == "") {
+			alert("Adreça incorrecte!");
+			return false;
+		}
+		var data = document.getElementById("exampleInputdatanaix").value;
+		if (!data.match(/^[0-9]{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])/)) {
+			alert('Data en format incorrecte. Format: YYYY/MM/DD');
+			return false;
+		}
+
+		var x = document.forms["form"]["pass"].value;
+		if (x == null || x == "") {
+			alert("Contrassenya incorrecte!");
+			return false;
+		}
+		alert("Registrat correctament");
+	}
+</script>
+
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Club de socis</title>
+
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
 <div class="masthead container">
 
-	
+
 	<div class="row">
-	<div class="col-md-8"><img src="staticlogin/imatges/logo.jpg" class="img-circle"></div>
-	<div class="col-md-4" align="right">
-	
-	<form class="form-horizontal" action="login" method="post" role="form" style="margin-top:10px">
-  <div class="form-group">
-    <label for="inputEmail3" class="col-sm-2 control-label"><p>DNI: </p></label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" name="user" id="inputEmail3" placeholder="DNI" style="width:250px">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="inputPassword3" class="col-sm-2 control-label"><p>Contrassenya: </p> </label>
-    <div class="col-sm-10">
-      <input type="password" class="form-control" id="inputPassword3" name="passw" placeholder="Contrassenya" style="width:250px">
-    </div>
-  </div>
- <input type="submit" class="btn btn-success" value="Login">
-  </div>
-</form>
+		<div class="col-md-8">
+			<img src="staticlogin/imatges/logo.jpg" class="img-circle">
+		</div>
+		<div class="col-md-4" align="right">
 
-	
-	
-	
+			<form class="form-horizontal" action="login" method="post"
+				role="form" style="margin-top: 10px">
+				<div class="form-group">
+					<label for="inputEmail3" class="col-sm-2 control-label"><p>DNI:
+						</p></label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" name="user"
+							id="inputEmail3" placeholder="DNI" style="width: 250px">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPassword3" class="col-sm-2 control-label"><p>Contrassenya:
+						</p> </label>
+					<div class="col-sm-10">
+						<input type="password" class="form-control" id="inputPassword3"
+							name="passw" placeholder="Contrassenya" style="width: 250px">
+					</div>
+				</div>
+				<input type="submit" class="btn btn-success" value="Login">
+		</div>
+		</form>
+
+
+
+
 	</div>
-	</div>
-	
-	
-		<div class="container">
+</div>
 
-        <!--<h3 class="text-muted">GRGABS</h3>-->
-        <ul class="nav nav-justified" align="center">
-          <li class="btn btn-default"><a href="#">1</a></li>
-          <li class="btn btn-default"><a href="#">2</a></li>
-		  <li class="btn btn-default"><a href="#">3</a></li>
-		  <li class="btn btn-default"><a href="#">4</a></li>
-		  <li class="btn btn-default"><a href="#">5</a></li>
-		  <li class="btn btn-default"><a href="#">6</a></li>
-        </ul>
-      </div>
-  </head>
-  
-  
-  
-  
- 
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+<div class="container">
+
+	<!--<h3 class="text-muted">GRGABS</h3>-->
+	<ul class="nav nav-justified" align="center">
+		<li class="btn btn-default"><a href="#">1</a></li>
+		<li class="btn btn-default"><a href="#">2</a></li>
+		<li class="btn btn-default"><a href="#">3</a></li>
+		<li class="btn btn-default"><a href="#">4</a></li>
+		<li class="btn btn-default"><a href="#">5</a></li>
+		<li class="btn btn-default"><a href="#">6</a></li>
+	</ul>
+</div>
+</head>
+
+
+
+
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
