@@ -15,6 +15,7 @@ import beans.Activitat;
 
 public class ActivitatJNDIDAO implements IDAOActivitat{
 	private String queryString;
+	private final String ACTIVITATTABLENAME = "activitats";
 	private Connection conexio;
 	private PreparedStatement s = null;
 	private Statement st = null;
@@ -22,10 +23,13 @@ public class ActivitatJNDIDAO implements IDAOActivitat{
 	public ActivitatJNDIDAO(Connection c) {
 	 conexio = c;
 	}
-
+	/**
+	 * Implementacio del metode add de IDAOActivitat que afegeix una activitat
+	 *  a la taula activitats de la base de dades bbdd.
+	 */
 	@Override
 	public void add(Activitat activitat) {
-		queryString = "INSERT INTO activitats( NOM, DESCRIPCIO, DIA, HORA, ESPAI) VALUES(?,?,?,?,?)";
+		queryString = "INSERT INTO" + ACTIVITATTABLENAME + " NOM, DESCRIPCIO, DIA, HORA, ESPAI) VALUES(?,?,?,?,?)";
 		
 		try {
 			s = conexio.prepareStatement(queryString);
@@ -47,10 +51,13 @@ public class ActivitatJNDIDAO implements IDAOActivitat{
 		}
 		
 	}
-
+	/**
+	 * Implementacio del metode update de IDAOActivitats que modifica una activitats 
+	 * de la taula activitat de la base de dades bbdd.
+	 */
 	@Override
 	public void update(Activitat activitat) {
-		queryString = "UPDATE activitats SET NOM = ?, DESCRIPCIO = ?, DIA= ?, HORA = ? ,ESPAI = ?,WHERE ID_ACTIVITAT = ?";
+		queryString = "UPDATE" + ACTIVITATTABLENAME + "SET NOM = ?, DESCRIPCIO = ?, DIA= ?, HORA = ? ,ESPAI = ?,WHERE ID_ACTIVITAT = ?";
 		
 		try {
 			s = conexio.prepareStatement(queryString);
@@ -71,7 +78,10 @@ public class ActivitatJNDIDAO implements IDAOActivitat{
 		}
 		
 	}
-
+	/**
+	 * Implementacio del metode delete de IDAOActivitat que elimina una activitat de la taula 
+	 * activitats de la base de dades bbdd.
+	 */
 	@Override
 	public void delete(Activitat activitat) {
 		/*queryString = "DELETE FROM activitats WHERE ID_ACTIVITAT = ?";
@@ -88,12 +98,15 @@ public class ActivitatJNDIDAO implements IDAOActivitat{
 	*/
 		
 	}
-
+	/**
+	 * Implementacio del metode getAll de IDAOActivitats que retorna un array d'activitats on hi han totes 
+	 * les activitats de la taula activitats de la base de dades bbdd.
+	 */
 	@Override
 	public Activitat[] getAll() {
 		Activitat[] llistaActivitats = null;
 		int i = 0;
-		queryString = "SELECT * FROM activitats";
+		queryString = "SELECT * FROM" + ACTIVITATTABLENAME;
 		
 		try {
 			ResultSet rs = (ResultSet) st.executeQuery(queryString);
@@ -112,12 +125,15 @@ public class ActivitatJNDIDAO implements IDAOActivitat{
 		}
 		return llistaActivitats;
 	}
-
+	/**
+	 * Implementacio del metode getAllNoSenior que retorna un array d'activitats que no siguin senior de la taula activitats
+	 * de la base de dades activitats.
+	 */
 	@Override
 	public Activitat[] getAllNoSenior() {
 		Activitat[] llistaActivitats = null;
 		int i = 0;
-		queryString = "SELECT * FROM activitats WHERE SENIOR = 0";
+		queryString = "SELECT * FROM" + ACTIVITATTABLENAME + " WHERE SENIOR = 0";
 		
 		try {
 			ResultSet rs = (ResultSet) st.executeQuery(queryString);
@@ -136,5 +152,4 @@ public class ActivitatJNDIDAO implements IDAOActivitat{
 		}
 		return llistaActivitats;
 	}
-
 }
