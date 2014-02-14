@@ -12,7 +12,6 @@ import beans.Soci;
 
 public class SociJNDIDAO implements IDAOSoci {
 	private String queryString;
-
 	private Connection conexio;
 	private PreparedStatement s = null;
 	public SociFactory socifactory = new SociFactory();
