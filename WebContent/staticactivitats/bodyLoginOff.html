@@ -1,4 +1,74 @@
 
+    <!-- Bootstrap -->
+	
+	<script language="javascript">
+	function validateForm()
+	{
+		var x=document.forms["form"]["nom"].value;
+		if (x==null || x=="")
+		  {
+		  alert("Nom incorrecte!");
+		  return false;
+		  }
+		 var x=document.forms["form"]["cognom1"].value;
+		if (x==null || x=="")
+		  {
+		  alert("Cognom 1 incorrecte!");
+		  return false;
+		  }
+		  var x=document.forms["form"]["cognom2"].value;
+		if (x==null || x=="")
+		  {
+		  alert("Cognom 2 incorrecte!");
+		  return false;
+		  }
+		  var x=document.forms["form"]["dni"].value;
+		if (x==null || x=="")
+		  {
+		  alert("DNI incorrecte!");
+		  return false;
+		  }
+		  var x=document.forms["form"]["adreca"].value;
+		if (x==null || x=="")
+		  {
+		  alert("AdreÃ§a incorrecte!");
+		  return false;
+		  }
+		  var data=document.getElementById("exampleInputdatanaix").value;
+		  if(!data.match(/^[0-9]{4}\/(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])/))
+			{
+				alert('Data en format incorrecte. Format: YYYY/MM/DD');
+				return false;
+			}
+			
+			
+		  var x=document.forms["form"]["pass"].value;
+		  if (x==null || x=="")
+		  {
+			  alert("Contrassenya incorrecte!");
+			  return false;
+		  }
+		  alert("Registrat correctament");
+	}
+	
+	</script>
+	
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		.marginTop{
+			margin-top:5px;
+		}
+		.blue{
+			border-color:blue;
+		}
+		.black{
+			border-color:black;
+		}
+	</style>
+  </head>
+  
+  <body>
+  
   
     <div class="container">
 		<div class="row">
@@ -11,12 +81,12 @@
 				<p>est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, </p>
 			</div>
 			<div class="col-md-8 negre">
-				<form role="form" action="login">
+				<form role="form" action="login" name="form" onsubmit="return validateForm()">
 					<div class="form-group">
 						<p><h3>Registre</h3><br/>
 						<p class="marginTop">Nom:</p>
 						<input type="text" class="form-control" id="exampleInputNom" placeholder="Entra nom" name="nom">
-						<p class="marginTop">Cognom:</p>
+						<p class="marginTop">Primer cognom:</p>
 						<input type="text" class="form-control" id="exampleInputCognom1" placeholder="Entra cognom" name="cognom1">
 						<p class="marginTop">Segon cognom:</p>
 						<input type="text" class="form-control" id="exampleInputCognom2" placeholder="Entra segon cognom" name="cognom2">
@@ -25,10 +95,11 @@
 						<p class="marginTop">Direcció:</p>
 						<input type="text" class="form-control" id="exampleInputdireccio" placeholder="Entra adreça" name="adreca">
 						<p class="marginTop">Data de naixement:</p>
-						<input type="text" class="form-control" id="exampleInputdatanaix" placeholder="Entra Data de naixement" name="data-naix">
+						<input type="date" class="form-control" id="exampleInputdatanaix" placeholder="YYYY/MM/DD" name="data-naix">
 						<p class="marginTop">Contrassenya:</p>
 						<input type="password" class="form-control" id="exampleInputEmail2" placeholder="Entra contrassenya" name="pass"><br>
 						<input type="submit" value="Enviar" class="btn btn-success">
+						<input type="reset" value="Esborrar">
 					</div>
 				</form>
 			</div>

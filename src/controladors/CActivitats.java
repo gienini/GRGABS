@@ -11,16 +11,18 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import servlets.Activitats;
 import DAO.ActivitatJNDIDAO;
+import DAO.SociJNDIDAO;
 import beans.Activitat;
+import beans.Senior;
+import beans.Soci;
+import factories.SociFactory;
 
 public class CActivitats implements Controller {
 
 	Connection con;
 
-	@Override
-	public String getPagina(String s) {
+	public String getPagina(String s, String dni) {
 		// Passem el context per paràmetre, d'aquesta manera obtenim el path del
 		// contingut estàtic
 		// Passem el context per paràmetre, d'aquesta manera obtenim el path del
@@ -45,7 +47,7 @@ public class CActivitats implements Controller {
 			/*** Header ***/
 			page = HTMLReader.getFile(new FileInputStream(s + "/header.html"));
 			/*** Soci Personal Activities ***/
-			page = page + getSociActivitats();
+			page = page + getSociActivitats(dni);
 			/*** Footer ***/
 			page = page
 					+ HTMLReader
@@ -57,12 +59,22 @@ public class CActivitats implements Controller {
 
 	}
 
-	private String getSociActivitats() {
+	private String getSociActivitats(String dni) {
 		String content = "";
 		String activity = "";
 		/*** Get the soci **/
+		SociJNDIDAO socijndi = new SociJNDIDAO(con);
+		SociFactory socif = new SociFactory();
+		Soci soci = socif.crearSoci();
+		soci = socijndi.getSoci(dni);
+		/***Get the activities **/
 		ActivitatJNDIDAO activitatjndi = new ActivitatJNDIDAO(con);
-		ArrayList<Activitat> activitats = activitatjndi.getAll();
+		ArrayList<Activitat> activitats = new ArrayList<Activitat>();
+		if(soci instanceof Senior){
+			activitats = activitatjndi.getAll();
+		} else {
+			activitats = activitatjndi.getAllNoSenior();
+		}
 		content="<div class='container marginbot'>";
 		for (Activitat activitat : activitats) {
 			System.out.println(activitat.getNom());
@@ -84,7 +96,7 @@ public class CActivitats implements Controller {
 	}
 
 	@Override
-	public String getPagina(String s, String dni) {
+	public String getPagina(String s) {
 		// TODO Auto-generated method stub
 		return null;
 	}

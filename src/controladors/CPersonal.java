@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -18,14 +20,17 @@ import factories.SociFactory;
 import DAO.ActivitatJNDIDAO;
 import DAO.SociJNDIDAO;
 import beans.Activitat;
+import beans.Senior;
 import beans.Soci;
 
-public class CPersonal implements Controller{
+public class CPersonal implements Controller {
 
 	Connection con;
+
 	@Override
 	public String getPagina(String s, String dni) {
-		//Passem el context per paràmetre, d'aquesta manera obtenim el path del contingut estàtic
+		// Passem el context per paràmetre, d'aquesta manera obtenim el path del
+		// contingut estàtic
 		/*** Initialize connection ***/
 		Context init = null;
 		try {
@@ -54,139 +59,114 @@ public class CPersonal implements Controller{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		String page = "" ;
+
+		String page = "";
 
 		try {
 			/*** Header ***/
-			page = HTMLReader.getFile(new FileInputStream(s
-					+ "/header.html"));
+			page = HTMLReader.getFile(new FileInputStream(s + "/header.html"));
 			/*** Soci Persnal Info ***/
-			page = page+getSociPersonalInfo(s, dni);			
+			page = page + getSociPersonalInfo(s, dni);
 			/*** Soci Personal Activities ***/
-//			page = page+getSociPersonalActivitats(s, dni);
+			// page = page+getSociPersonalActivitats(s, dni);
 			/*** Footer ***/
-			page = page+HTMLReader.getFile(new FileInputStream(s
-					+ "/footer.html"));
+			page = page
+					+ HTMLReader
+							.getFile(new FileInputStream(s + "/footer.html"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		return page;
-		
+
 	}
 
 	private String getSociPersonalInfo(String s, String dni) {
 
 		String content = "";
 		String line = "";
-		
-		/***Get the soci **/
+
+		/*** Get the soci **/
 		SociJNDIDAO socijndi = new SociJNDIDAO(con);
 		SociFactory socif = new SociFactory();
 		Soci soci = socif.crearSoci();
 		soci = socijndi.getSoci(dni);
-		
-		
-		/*String name = "David";
-		String cog1 = "Rubio";
-		dni = "47845639G";
-		String adreca = "Carrer del mig";*/
+
 		String edat = "26";
 		try {
-			BufferedReader read = new BufferedReader(new FileReader(s + "/bodyLoginOn.html"));
-			ActivitatJNDIDAO act= new ActivitatJNDIDAO(con);
+			BufferedReader read = new BufferedReader(new FileReader(s
+					+ "/bodyLoginOn.html"));
+			ActivitatJNDIDAO act = new ActivitatJNDIDAO(con);
 			ArrayList<Activitat> activitats = act.getAll();
-			String activity ="";
+			String activity = "";
 			try {
 				line = read.readLine();
-				while(line != null){
-					if(line.contains("%activitat:info_activitat%")){
-						for(Activitat activitat : activitats)
-						{						
-							activity = "<div class='col-md-12 margintop marginbot'><h3>Activitat: "+activitat.getNom()+" </h3>"
-									+ "<p>"+activitat.getDescripcio()+" </p>"
-											+ "<button type='button' class='btn btn-primary'>Més info</button>"
-											+ "<button type='button' class='btn btn-success'>Apunta'm-hi</button>"
-											+ "<button type='button' class='btn btn-danger'>Cancela activitat"
-											+ "</button></div>";
-							content = content + line.replaceAll("%activitat:info_activitat%", activity);
+				while (line != null) {
+					if (line.contains("%activitat:info_activitat%")) {
+						for (Activitat activitat : activitats) {
+							if (socijndi.isOnActivitat(soci, activitat)) {
+								activity = "<div class='col-md-12 margintop marginbot'><h3>Activitat: "
+										+ activitat.getNom()
+										+ " </h3>"
+										+ "<p>"
+										+ activitat.getDescripcio()
+										+ " </p>"
+										+ "<button type='button' class='btn btn-primary'>Més info</button>"
+										+ "<button type='button' class='btn btn-danger'>Cancela activitat"
+										+ "</button></div>";
+								content = content
+										+ line.replaceAll(
+												"%activitat:info_activitat%",
+												activity);
+							}
 						}
-						//line = line.replaceAll("%personal:variable%", "Hello World");
-					} 
-					//We need to find if the line contains a value
-					 if (line.contains("%personal:name%")){
-						line = line.replaceAll("%personal:name%", soci.getNom());
-					} else if (line.contains("%personal:cog1%")){
-						line = line.replaceAll("%personal:cog1%", soci.getCog1() +" "+soci.getCog2());
-					} else if (line.contains("%personal:dni%")){
-						line = line.replaceAll("%personal:dni%", soci.getDni());
-					} else if (line.contains("%personal:adreca%")){
-						line = line.replaceAll("%personal:adreca%", soci.getAdreca());
-					} else if (line.contains("%personal:edat%")){
-						line = line.replaceAll("%personal:edat%", edat);
-					} 
-					content = content + line;
+					} else {
+						// We need to find if the line contains a value
+						if (line.contains("%personal:name%")) {
+							line = line.replaceAll("%personal:name%",
+									soci.getNom());
+						} else if (line.contains("%personal:cog1%")) {
+							line = line.replaceAll("%personal:cog1%",
+									soci.getCog1() + " " + soci.getCog2());
+						} else if (line.contains("%personal:dni%")) {
+							line = line.replaceAll("%personal:dni%",
+									soci.getDni());
+						} else if (line.contains("%personal:adreca%")) {
+							line = line.replaceAll("%personal:adreca%",
+									soci.getAdreca());
+						} else if (line.contains("%personal:edat%")) {
+							line = line.replaceAll("%personal:edat%", edat);
+						} else if (line.contains("%personal:data_alta%")) {
+							Calendar alta = new GregorianCalendar();
+							alta = soci.getData_alta();
+							line = line.replaceAll(
+									"%personal:data_alta%",
+									alta.get(alta.YEAR) + "/"
+											+ alta.get(alta.MONTH) + "/"
+											+ alta.get(alta.DAY_OF_MONTH));
+							if (soci instanceof Senior) {
+								line = line
+										+ "<li><h4 >Status: Senior</h4></li>";
+							} else {
+								line = line
+										+ "<li><h4 >Status: Basic</h4></li>";
+							}
+						}
+						content = content + line;
+					}
 					line = read.readLine();
+
 				}
-				
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		return content;
-	}
-	
-	private String getSociPersonalActivitats(String s, String dni) {
-		String content = "";
-		String line = "";
-		String activity = "";
-		/***Get the soci **/
-		SociJNDIDAO socijndi = new SociJNDIDAO(con);
-		
-		SociFactory socif = new SociFactory();
-		Soci soci = socif.crearSoci();
-		soci = socijndi.getSoci(dni);
-		ActivitatJNDIDAO act= new ActivitatJNDIDAO(con);
-		ArrayList<Activitat> activitats = act.getAll();
-		try {
-			BufferedReader read = new BufferedReader(new FileReader(s + "/bodyLoginOn.html"));
-			try {
-				line = read.readLine();
-				while(line != null){
-					//We need to find if the line contains a value
-					if(line.contains("%activitat:info_activitat%")){
-						for(Activitat activitat : activitats)
-						{						
-							activity = "<div class='col-md-12 margintop marginbot'><h3>Activitat: "+activitat.getNom()+" </h3>"
-									+ "<p>"+activitat.getDescripcio()+" </p>"
-											+ "<button type='button' class='btn btn-primary'>Més info</button>"
-											+ "<button type='button' class='btn btn-success'>Apunta'm-hi</button>"
-											+ "<button type='button' class='btn btn-danger'>Cancela activitat"
-											+ "</button></div>";
-							content = content + line.replaceAll("%activitat:info_activitat%", activity);
-						}
-						//line = line.replaceAll("%personal:variable%", "Hello World");
-					} 
-					content = content + line;
-					line = read.readLine();
-				}
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
 		return content;
 	}
 
@@ -196,8 +176,4 @@ public class CPersonal implements Controller{
 		return null;
 	}
 
-
 }
-
-
-

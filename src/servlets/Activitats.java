@@ -36,11 +36,13 @@ public class Activitats extends HttpServlet {
 		String pagina = "";
 		Controller controlador = null;
 		PrintWriter pw = response.getWriter();
+		//The user's session DNI
+		String dni = (String) request.getSession().getAttribute("login");
 
 		try{
 			if(!request.getSession().getAttribute("login").equals("nologin")){
 				controlador = new CActivitats();
-				pagina = controlador.getPagina(context);
+				pagina = controlador.getPagina(context, dni);
 				pw.print(pagina);
 			}
 		} catch (Exception e) {
